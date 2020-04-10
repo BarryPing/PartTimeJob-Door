@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ptjob-door
 
 > A Vue.js project
@@ -19,3 +20,7 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+=======
+# PartTimeJob-Door
+勤工助学系统门户网站
+>>>>>>> b5abeb75243d822a58a4d8090254dd4fc39a5403
