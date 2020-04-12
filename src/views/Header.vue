@@ -21,14 +21,14 @@
         <el-button size="mini" @click="register">注册</el-button>
       </div>
       <div v-show="show_touxiang" class="touxiang">
-        <el-menu :default-active="index" mode="horizontal" router>
+        <el-menu mode="horizontal" router>
           <el-submenu index="2">
             <template v-slot:title>
               <span>{{ username }}</span>
               <el-divider direction="vertical" />
               <img src="../assets/img/qq.png">
             </template>
-            <el-menu-item index="/info" style="font-size:15px;">个人中心</el-menu-item>
+            <el-menu-item index="/profile" style="font-size:15px;">个人中心</el-menu-item>
             <el-menu-item index="/account" style="font-size:15px">账号设置</el-menu-item>
             <el-menu-item style="font-size:15px" @click="logout">退出登录</el-menu-item>
           </el-submenu></el-menu>
@@ -49,21 +49,41 @@ export default {
       show_login_register: true
     }
   },
-  created() {
+  mounted() {
     this.initHeader()
   },
   methods: {
     // 初始化
     initHeader() {
-      this.username = this.$store.getters.getUser.username
-      if (window.sessionStorage.getItem('isLogin')) {
+      if (this.$store.getters.getToken) {
         this.show_login_register = false
         this.show_touxiang = true
+        this.getInfo()
       }
     },
+    // 获取个人信息
+    async getInfo() {
+      // console.log('token=' + this.$store.getters.getToken)
+      await this.$http.get('user/student/info')
+        .then(res => {
+          const { data } = res.data
+          // console.log(res)
+          if (res.data.code !== 20000) return this.$message.error(res.data.message)
+          this.$store.dispatch('asyncUpdateUser', data)
+          // 判断如果学号为空则立即跳转到个人信息界面，编辑个人信息
+          if (!data.stuid) {
+            // console.log('==========')
+            this.$router.push('/profile')
+          }
+          this.username = this.$store.getters.getUser.username
+        })
+    },
     // 注销登录
-    logout() {
+    async logout() {
       sessionStorage.clear()
+      await this.$http.post('user/student/logout')
+      this.$store.dispatch('SET_TOKEN', null)
+      this.$store.dispatch('asyncUpdateUser', null)
       this.$router.push('/login')
     },
     // 去登录

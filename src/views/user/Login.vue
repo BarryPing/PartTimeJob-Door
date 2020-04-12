@@ -98,8 +98,8 @@ export default {
       imgSrc: 'http://localhost:8888/api/user/student/validcode',
       // 登录表单的数据绑定对象
       loginForm: {
-        username: 'syw@jg163.com',
-        password: '123456',
+        username: 'tongfangpingcoder@163.com',
+        password: 't123456',
         validcode: ''
       },
       loginFormRules: {
@@ -132,18 +132,24 @@ export default {
       }
       return url
     },
+    // 登录请求
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return // 校验失败，则返回
         await this.$http.post('user/student/login', this.loginForm)
           .then(res => {
             console.log(res)
-            if (res.data.code !== 20000) return this.$message.error(res.data.message)
+            if (res.data.code !== 20000) {
+              this.loginForm.validcode = ''
+              return this.$message.error(res.data.message)
+            }
             this.$message.success(res.data.message)
+            const { token } = res.data.data
+            console.log(token)
             // 设置用户登录成功
             sessionStorage.setItem('isLogin', 'true')
-            // 将登录用户的信息放到vuex当中去
-            this.$store.dispatch('asyncUpdateUser', res.data)
+            // 将登录用户的token放到vuex当中去
+            this.$store.dispatch('SET_TOKEN', token)
             this.$router.push('/index')
             return
           })
@@ -153,6 +159,7 @@ export default {
           })
       })
     }
+
   }
 }
 </script>

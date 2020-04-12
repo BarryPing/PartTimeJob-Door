@@ -157,12 +157,12 @@ export default {
     // 发起获取邮箱验证码的请求
     async  sendNow() {
     // 发起发送激活码请求
-      await this.$http.post('member/getCode', {
+      await this.$http.post('reg/getCode', {
         email: this.registerForm.email,
         password: this.registerForm.password
       })
         .then(res => {
-          // console.log(res)
+          console.log(res)
           if (res.data.code !== 20000) return this.$message.error(res.data.message)
           this.$notify({
             title: '发送成功',
@@ -183,7 +183,7 @@ export default {
           return this.$message.warning('您必须阅读并同意条款!')
         }
         if (!valid) return
-        await this.$http.post('member/register', this.registerForm)
+        await this.$http.post('reg/register', this.registerForm)
           .then(res => {
           // console.log(res)
             if (res.data.code !== 20000) return this.$message.error(res.data.message)

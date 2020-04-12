@@ -10,8 +10,8 @@ export default {
   components: {
     'top': Header
   },
-  created() {
-
+  mounted() {
+    // this.getInfo()
   },
   methods: {
 
