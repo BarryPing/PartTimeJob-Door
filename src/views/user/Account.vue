@@ -1,7 +1,7 @@
 <template>
   <div>
-    <top />
-    <div style="margin:2% 14%;">
+    <myheader />
+    <div style="margin:2% 10%;">
       <el-container>
         <el-aside width="300px">
           <h3>账号设置</h3>
@@ -26,11 +26,9 @@
 </template>
 
 <script>
-import Header from '@/views/Header'
+import myheader from '@/views/Header'
 export default {
-  components: {
-    'top': Header
-  },
+  components: { myheader },
   created() {
 
   },

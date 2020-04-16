@@ -172,8 +172,8 @@ export default {
           // this.$message.success(res.data.message)
         })
         .catch(err => {
-          // console.log(err)
-          this.$message.error('网络有问题：' + err)
+          console.log(err)
+          this.$message.error('网络有问题')
         })
     },
     // 用户注册

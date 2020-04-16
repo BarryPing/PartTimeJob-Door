@@ -1,7 +1,7 @@
 <template>
   <div>
-    <top />
-    <div style="margin:2% 14%;">
+    <myheader ref="updateInfo" />
+    <div style="margin:2% 10%;">
       <el-card :body-style="{ padding: '30px' }">
         <el-row :gutter="10">
           <!-- 左边区域 -->
@@ -72,7 +72,8 @@
           </el-col>
           <!-- 右边区域 -->
           <el-col :span="5">
-            <img src="../../assets/img/qq.png">
+            <!-- 头像区域 -->
+            <avatar />
             <el-row />
             <el-row />
             <el-row />
@@ -165,7 +166,8 @@
 </template>
 
 <script>
-import Header from '@/views/Header'
+import myheader from '@/views/Header'
+import avatar from '@/views/user/Icon'
 import { validateNumber,
   checkName,
   numberLength,
@@ -174,9 +176,8 @@ import { validateNumber,
   validateEMail
 } from '@/components/rules'
 export default {
-  components: {
-    'top': Header
-  },
+  components: { myheader, avatar },
+
   data() {
     return {
       // 更新个人信息时间
@@ -255,6 +256,7 @@ export default {
             this.$store.dispatch('asyncUpdateUser', data)
             this.init()
             this.InfoFormDialogVisible = false
+            this.$refs.updateInfo.initHeader()
           })
           .catch(err => {
           // console.log(err)

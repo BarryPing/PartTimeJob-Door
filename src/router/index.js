@@ -9,6 +9,8 @@ import Account from '@/views/user/Account'
 import Password from '@/views/user/account/Password'
 import Private from '@/views/user/account/Private'
 import Wechat from '@/views/user/account/Wechat'
+import JobDetails from '@/views/job/JobDetails'
+import Appro from '@/views/job/Appro'
 Vue.use(Router)
 
 const routes = [
@@ -29,10 +31,7 @@ const routes = [
   {
     name: 'index',
     path: '/index',
-    component: Index,
-    meta: {
-      requireAuth: false
-    }
+    component: Index
   },
   {
     name: 'profile',
@@ -55,8 +54,23 @@ const routes = [
       { path: '/private', component: Private },
       { path: '/wechat', component: Wechat }
     ]
+  },
+  {
+    name: 'job',
+    path: '/job/:id',
+    component: JobDetails,
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    name: 'appro',
+    path: '/appro/:id',
+    component: Appro,
+    meta: {
+      requireAuth: true
+    }
   }
-
 ]
 const router = new Router({
   routes

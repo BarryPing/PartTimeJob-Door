@@ -26,7 +26,7 @@
             <template v-slot:title>
               <span>{{ username }}</span>
               <el-divider direction="vertical" />
-              <img src="../assets/img/qq.png">
+              <el-avatar shape="circle" :size="30" :src="avatar" />
             </template>
             <el-menu-item index="/profile" style="font-size:15px;">个人中心</el-menu-item>
             <el-menu-item index="/account" style="font-size:15px">账号设置</el-menu-item>
@@ -41,10 +41,11 @@
 
 <script>
 export default {
-  name: 'Header',
+  name: 'MyHeader',
   data() {
     return {
       username: '',
+      avatar: '',
       show_touxiang: false,
       show_login_register: true
     }
@@ -76,6 +77,7 @@ export default {
             this.$router.push('/profile')
           }
           this.username = this.$store.getters.getUser.username
+          this.avatar = this.$store.getters.getUser.icon
         })
     },
     // 注销登录
@@ -105,11 +107,11 @@ export default {
     background-color: #fafafa;
    >img{
        position: absolute;
-       right:70%;
+       right:75%;
    }
    > div {
        position: absolute;
-       right:35%;
+       right:40%;
        + div{
             color: white;
             position: absolute;
