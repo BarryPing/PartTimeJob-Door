@@ -10,7 +10,8 @@ import Password from '@/views/user/account/Password'
 import Private from '@/views/user/account/Private'
 import Wechat from '@/views/user/account/Wechat'
 import JobDetails from '@/views/job/JobDetails'
-import Appro from '@/views/job/Appro'
+import CateJob from '@/views/job/CateJob'
+import CateJobDetail from '@/views/job/CateJobDetail'
 Vue.use(Router)
 
 const routes = [
@@ -62,15 +63,18 @@ const routes = [
     meta: {
       requireAuth: true
     }
-  },
-  {
-    name: 'appro',
-    path: '/appro/:id',
-    component: Appro,
+  }, {
+    name: 'cateJob',
+    path: '/cateJob/:id',
+    component: CateJob,
+    children: [
+      { name: 'catejobdetail', path: '/catejobdetail/:id', component: CateJobDetail }
+    ],
     meta: {
       requireAuth: true
     }
   }
+
 ]
 const router = new Router({
   routes

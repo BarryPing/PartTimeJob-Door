@@ -173,7 +173,7 @@ export function checkSpecificKey(rule, value, callback) {
   const reg = "[`~!#$^&*()=|{}':;',\\[\\].<>/?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'"
   for (var i = 0; i < value.length; i++) {
     if (reg.indexOf(value.substr(i, 1)) !== -1) {
-      callback(new Error('只能输入数字或字母'))
+      callback(new Error('只能输入中文、数字或字母'))
     } else {
       callback()
     }

@@ -5,17 +5,17 @@
     <!-- 第一部分 -->
     <div style="margin:2% 10%;">
       <!-- 岗位搜索区域 -->
-      <div style="margin:2% 10%;">
+      <!-- <div style="margin:2% 10%;">
         <el-row>
           <el-col :span="18">
-            <el-input v-model="serach" placeholder="搜索合适的岗位" />
+            <el-input v-model="jobName" placeholder="搜索合适的岗位" />
           </el-col>
           <el-col :span="4">
-            <el-button>搜索</el-button>
+            <el-button @click="toSearch">搜索</el-button>
           </el-col>
         </el-row>
-
-      </div>
+      </div> -->
+      <mysearch @func="getSearchJobs" />
       <!-- 岗位分类区域 -->
       <el-row style="margin-top:50px">
         <!-- 左边区域 -->
@@ -24,7 +24,7 @@
             <div v-for="(item,index) in jobCate" :key="item.jtId" @mouseenter="isShow(index)" @mouseleave="noShow">
               <el-row>
                 <b>{{ item.jtName }}</b>
-                <el-link v-for="(subItem,index) in item.children" v-if="index<5" :key="subItem.jtId" :span="8">{{ subItem.jtName }}</el-link>
+                <el-link v-for="(subItem,index) in item.children" v-if="index<5" :key="subItem.jtId" :span="8" @click="toCateJob(subItem.jtId)">{{ subItem.jtName }}</el-link>
                 <div style="position:absolute;left:330px;color:#C0C4CC">
                   <i class="el-icon-arrow-right" />
                 </div>
@@ -53,19 +53,20 @@
         <div style="position:absolute;z-index: 0;left:400px">
           <el-row :gutter="10">
             <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
+              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
             </el-col>
             <el-col :span="8">
               <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
             </el-col>
             <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
+              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
             </el-col>
+
             <el-col :span="8">
               <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
             </el-col>
             <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
+              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
             </el-col>
             <el-col :span="8">
               <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
@@ -74,15 +75,16 @@
         </div>
       </el-row>
     </div>
+    <!-- 岗位列表区域 -->
     <div style="margin:6% 10%;">
-      <el-divider content-position="center"><div style="font-size:24px;color:#414a60">热招岗位</div></el-divider>
+      <el-divider content-position="center"><div style="font-size:24px;color:#414a60">{{ jobtxt }}</div></el-divider>
       <el-row>
         <el-col v-for="(item,index) in job" v-if="index<9" :key="item.cen_id" :span="8">
           <el-card class="right-cards" shadow="hover">
             <el-row>
               <!-- 图片区域 -->
               <el-col :span="6">
-                <img style="width:45px;height:45px;cursor:pointer;" src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
+                <img style="width:45px;height:45px;cursor:pointer;" src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
               </el-col>
               <!-- 岗位描述区域 -->
               <el-col :span="18">
@@ -97,7 +99,7 @@
                   {{ item.cen_unit }}
                   <el-divider direction="vertical" />
                   <!-- 招聘人数 -->
-                  招聘:{{ item.cen_number }}
+                  招聘:{{ item.cen_number }}人
                 </p>
                 <!-- 工钱 -->
                 <p style="color:#fc6c38;font-size:16px;cursor:pointer;">15元/小时</p>
@@ -112,8 +114,9 @@
 
 <script>
 import myheader from '@/views/Header'
+import mysearch from '@/views/Search'
 export default {
-  components: { myheader },
+  components: { myheader, mysearch },
   data() {
     return {
       show: false,
@@ -122,7 +125,8 @@ export default {
       // 岗位数据
       job: [],
       id: 0,
-      serach: '',
+      jobName: '',
+      jobtxt: '热门岗位',
       queryInfo: {
         query: '',
         pagenum: 1,
@@ -177,6 +181,15 @@ export default {
     // 岗位详情页面路由
     routeToDetail(id) {
       this.$router.push({ name: 'job', params: { id: id }})
+    },
+    // 跳转分类界面
+    toCateJob(id) {
+      this.$router.push({ name: 'cateJob', params: { id: id }})
+    },
+    // 获取搜索子组件传递过来的数据
+    getSearchJobs(data) {
+      this.job = data
+      this.jobtxt = '查询结果'
     }
   }
 }
