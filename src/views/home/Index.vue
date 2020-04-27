@@ -51,27 +51,15 @@
         </div>
         <!-- 右边区域:部分岗位信息 -->
         <div style="position:absolute;z-index: 0;left:400px">
-          <el-row :gutter="10">
-            <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
-            </el-col>
-            <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
-            </el-col>
-            <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
-            </el-col>
-
-            <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
-            </el-col>
-            <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
-            </el-col>
-            <el-col :span="8">
-              <img src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/c5db1089-39f2-454b-a597-4c2ad2684b41.png">
-            </el-col>
-          </el-row>
+          <template>
+            <el-carousel indicator-position="outside" style="width:600px;height:500px">
+              <el-carousel-item v-for="item in notice" :key="item.buId">
+                <h2>{{ item.buTitle }}</h2>
+                <p style="font-size:20px"><pre>{{ item.buContent }}</pre></p>
+                <span style="position:absolute;left:400px;top:250px">{{ item.buDate }}</span>
+              </el-carousel-item>
+            </el-carousel>
+          </template>
         </div>
       </el-row>
     </div>
@@ -84,7 +72,7 @@
             <el-row>
               <!-- 图片区域 -->
               <el-col :span="6">
-                <img style="width:45px;height:45px;cursor:pointer;" src="http://ptjobsite.oss-cn-hangzhou.aliyuncs.com/HeadIcon/377c423d-42b9-437c-8c5d-1da8ec1b22c5.png">
+                <img style="width:45px;height:45px;cursor:pointer;" src="../../assets/img/qing.png">
               </el-col>
               <!-- 岗位描述区域 -->
               <el-col :span="18">
@@ -131,12 +119,14 @@ export default {
         query: '',
         pagenum: 1,
         pagesize: 9
-      }
+      },
+      notice: []
     }
   },
   mounted() {
     this.getJobCate()
     this.getJob()
+    this.getNotice()
   },
   methods: {
     isShow(id) {
@@ -190,6 +180,16 @@ export default {
     getSearchJobs(data) {
       this.job = data
       this.jobtxt = '查询结果'
+    },
+    // 获取公告列表
+    getNotice() {
+      this.$http.get('notice/getnotice')
+        .then(res => {
+          const { code, message, data } = res.data
+          if (code !== 20000) return this.$message.error(message)
+          this.notice = data
+          console.log(this.notice)
+        })
     }
   }
 }
